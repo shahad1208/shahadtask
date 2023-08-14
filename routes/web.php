@@ -22,6 +22,8 @@ Route::get('/', function () {
 });
 
 
+
+
 Route::group(['middleware'=>'guest'],function(){
     Route::get('login',[AuthController::class,'index']);
 
@@ -64,9 +66,12 @@ Route::put('home/view-profile/{id}/edit', [AuthController::class, 'update']);
 
     Route::delete('/home/show-all-users/{id}', [AuthController::class, 'destroy'])->name('user.destroy');
     Route::get('/home/show-all-users/{id}/edit', [AuthController::class, 'edit1'])->name('user.edit');
-
+//Show All users 
 Route::put('/home/show-all-users/{id}/edit', [AuthController::class, 'updateuser'])->name('user.update');
 
+
+
+//Routes for email sent to users 
 Route::get('home/users/sendemailto', [UserController::class, 'index2'])->name('users.index2');
 Route::post('users-send-email', [UserController::class, 'sendEmail'])->name('ajax.send.email');
 
@@ -75,6 +80,20 @@ Route::middleware(['auth', '1'])->group(function () {
     Route::get('/admin-dashboard', [AdminController::class, 'index1'])->name('admin.dashboard');
     // ...
 });
+
+
+//Routes for Jobs And Queue
+
+Route::get('home/email-test', function(){
+  
+    $details['email'] = 'shahad1932@gmail.com';
+  
+    dispatch(new App\Jobs\SendEmailJob($details));
+  
+    dd('Jobs and Queue Done');
+});
+
+
 
 });
 
